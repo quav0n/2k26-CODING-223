@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F2F2F7;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="m6.NetjeansController">
+<children>
+      <BorderPane AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <top>
+            <VBox spacing="10.0" style="-fx-background-color: rgba(255,255,255,0.8); -fx-background-radius: 15; -fx-padding: 10;">
+               <children>
+                  <MenuBar style="-fx-background-color: transparent;">
+                    <menus>
+                      <Menu text="File" /><Menu text="Edit" /><Menu text="Source" />
+                    </menus>
+                  </MenuBar>
+                  <HBox spacing="10.0">
+                     <children>
+                        <Button style="-fx-background-color: #007AFF; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" text="▶ RUN" />
+                        <Button style="-fx-background-color: rgba(0,0,0,0.05); -fx-background-radius: 10;" text="💾 SAVE" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <left>
+            <VBox prefWidth="200.0" style="-fx-background-color: rgba(255,255,255,0.4); -fx-background-radius: 15; -fx-padding: 10;">
+               <children>
+                  <Label style="-fx-text-fill: #8E8E93; -fx-font-weight: bold; -fx-font-size: 11;" text="EXPLORER" />
+                  <TreeView style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <TabPane style="-fx-background-color: white; -fx-background-radius: 15;" tabClosingPolicy="ALL_TABS">
+              <tabs>
+                <Tab text="App.java">
+                  <content>
+                    <TextArea style="-fx-control-inner-background: white; -fx-font-family: 'Consolas';" text="public class App {&#10;    public static void main(String[] args) {&#10;        System.out.println(&quot;kaon! -_-&quot;);&#10;    }&#10;}" />
+                  </content>
+                </Tab>
+                  <Tab text="PrimaryController.java">
+                     <content>
+                        <TextArea prefHeight="200.0" prefWidth="200.0" text="package m6;&#10;&#10;import java.io.IOException;&#10;import javafx.fxml.FXML;&#10;&#10;public class PrimaryController {&#10;&#10;    @FXML&#10;    private void switchToSecondary() throws IOException {&#10;        App.setRoot(&quot;secondary&quot;);&#10;    }&#10;}&#10;" />
+                     </content>
+                  </Tab>
+                  <Tab text="primary.fxml">
+                     <content>
+                        <TextArea prefHeight="200.0" prefWidth="200.0" text="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;?import javafx.scene.layout.VBox?&gt;&#10;&lt;?import javafx.scene.control.Label?&gt;&#10;&lt;?import javafx.scene.control.Button?&gt;&#10;&lt;?import javafx.geometry.Insets?&gt;&#10;&#10;&lt;VBox alignment=&quot;CENTER&quot; spacing=&quot;20.0&quot; xmlns=&quot;http://javafx.com/javafx/8.0.171&quot; &#10;xmlns:fx=&quot;http://javafx.com/fxml/1&quot; fx:controller=&quot;m6.PrimaryController&quot;&gt;   &#10;&#10;&lt;children&gt;      &#10;&lt;Label text=&quot;Primary View&quot; /&gt;      &#10;&lt;Button fx:id=&quot;primaryButton&quot; text=&quot;Switch to Secondary View&quot; onAction=&quot;#switchToSecondary&quot;/&gt;   &#10;&lt;/children&gt;   &#10;&#10;&lt;padding&gt;      &#10;&lt;Insets bottom=&quot;20.0&quot; left=&quot;20.0&quot; right=&quot;20.0&quot; top=&quot;20.0&quot; /&gt;   &#10;&lt;/padding&gt;&#10;&lt;/VBox&gt;" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </center>
+         <bottom>
+            <AnchorPane prefHeight="120.0" style="-fx-background-color: #1C1C1E; -fx-background-radius: 15;">
+               <children>
+                  <Label layoutX="14.0" layoutY="14.0" style="-fx-text-fill: #32D74B; -fx-font-family: 'Courier New';" text="PS C:\Users\Jhoen\Documents\CODING SHII\task6\vm6&gt; " />
+               </children>
+            </AnchorPane>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>
