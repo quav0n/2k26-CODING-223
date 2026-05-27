@@ -30,47 +30,30 @@ public class DashboardController {
     @FXML private TableColumn<AttendanceRecord, String> colTimestamp;
     @FXML private TableColumn<AttendanceRecord, String> colStatus;
 
-    private final ObservableList<AttendanceRecord> databaseMockRegistry = FXCollections.observableArrayList();
-    private int universalPrimaryKeyIdSequence = 1001;
+    // Use a static list instance to preserve logs safely across logout sessions!
+    private static final ObservableList<AttendanceRecord> databaseMockRegistry = FXCollections.observableArrayList();
+    private static int universalPrimaryKeyIdSequence = 1001;
     
     private boolean isMaximizedState = false;
     private boolean isMinimizedState = false;
 
     @FXML
     public void initialize() {
-        databaseMockRegistry.add(new AttendanceRecord(universalPrimaryKeyIdSequence++, "Jane Doe", getFormattedSystemTime(), "Verified Access"));
-        databaseMockRegistry.add(new AttendanceRecord(universalPrimaryKeyIdSequence++, "John Smith", getFormattedSystemTime(), "Verified Access"));
+        // Pre-fill placeholder items if database is totally empty
+        if (databaseMockRegistry.isEmpty()) {
+            databaseMockRegistry.add(new AttendanceRecord(universalPrimaryKeyIdSequence++, "Jane Doe", getFormattedSystemTime(), "Clock-In (Face ID)"));
+            databaseMockRegistry.add(new AttendanceRecord(universalPrimaryKeyIdSequence++, "John Smith", getFormattedSystemTime(), "Clock-In (Face ID)"));
+        }
         attendanceTable.setItems(databaseMockRegistry);
     }
 
-    @FXML
-    private void toggleMaximizeWorkspace(ActionEvent event) {
-        isMaximizedState = !isMaximizedState;
-        
-        if (isMaximizedState) {
-            sidebarContainer.setVisible(false);
-            sidebarContainer.setManaged(false); 
-            btnMaximizeWorkspace.setText("Show Sidebar");
-        } else {
-            sidebarContainer.setVisible(true);
-            sidebarContainer.setManaged(true);
-            btnMaximizeWorkspace.setText("Maximize View");
-        }
-    }
-
-    @FXML
-    private void toggleMinimizeWorkspace(ActionEvent event) {
-        isMinimizedState = !isMinimizedState;
-        
-        if (isMinimizedState) {
-            collapsibleContentArea.setVisible(false);
-            collapsibleContentArea.setManaged(false);
-            btnMinimizeWorkspace.setText("Expand Layout");
-        } else {
-            collapsibleContentArea.setVisible(true);
-            collapsibleContentArea.setManaged(true);
-            btnMinimizeWorkspace.setText("Collapse Layout");
-        }
+    /**
+     * Public method exposed to accept incoming biometric transfer identification values
+     */
+    public void registerScannedEmployeeCheckIn(String explicitEmployeeName) {
+        databaseMockRegistry.add(new AttendanceRecord(
+                universalPrimaryKeyIdSequence++, explicitEmployeeName, getFormattedSystemTime(), "Clock-In (Face ID)"
+        ));
     }
 
     @FXML
@@ -82,7 +65,7 @@ public class DashboardController {
         }
 
         databaseMockRegistry.add(new AttendanceRecord(
-                universalPrimaryKeyIdSequence++, inputIdentityNameString, getFormattedSystemTime(), "Verified Access"
+                universalPrimaryKeyIdSequence++, inputIdentityNameString, getFormattedSystemTime(), "Manual Override"
         ));
         nameInputField.clear();
     }
@@ -108,6 +91,34 @@ public class DashboardController {
             targetedActiveWindowStage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void toggleMaximizeWorkspace(ActionEvent event) {
+        isMaximizedState = !isMaximizedState;
+        if (isMaximizedState) {
+            sidebarContainer.setVisible(false);
+            sidebarContainer.setManaged(false); 
+            btnMaximizeWorkspace.setText("Show Sidebar");
+        } else {
+            sidebarContainer.setVisible(true);
+            sidebarContainer.setManaged(true);
+            btnMaximizeWorkspace.setText("Maximize View");
+        }
+    }
+
+    @FXML
+    private void toggleMinimizeWorkspace(ActionEvent event) {
+        isMinimizedState = !isMinimizedState;
+        if (isMinimizedState) {
+            collapsibleContentArea.setVisible(false);
+            collapsibleContentArea.setManaged(false);
+            btnMinimizeWorkspace.setText("Expand Layout");
+        } else {
+            collapsibleContentArea.setVisible(true);
+            collapsibleContentArea.setManaged(true);
+            btnMinimizeWorkspace.setText("Collapse Layout");
         }
     }
 

@@ -31,6 +31,9 @@ public class LoginController {
     private TranslateTransition laserSweep;
     private final Random randomGenerator = new Random();
 
+    // Simulated Registered Face Profiles Database
+    private final String[] recognizedEmployees = {"Alex Rivers", "Jordan Blake", "Taylor Morgan", "Morgan Vance"};
+
     @FXML
     public void initialize() {
         laserSweep = new TranslateTransition(Duration.seconds(1.2), scanLine);
@@ -76,29 +79,33 @@ public class LoginController {
 
     private void handleSuccess(ActionEvent event) {
         updateMouthExpression(true); 
-        statusLabel.setText("Identity Confirmed");
-        statusLabel.setStyle("-fx-text-fill: #34C759; -fx-font-weight: bold;"); // iOS System Green
+        
+        // Randomly identify one of our registered employees from the biometric database
+        String identifiedUser = recognizedEmployees[randomGenerator.nextInt(recognizedEmployees.length)];
+        
+        statusLabel.setText("Verified: " + identifiedUser);
+        statusLabel.setStyle("-fx-text-fill: #34C759; -fx-font-weight: bold;"); 
         scanButton.setDisable(true);
 
         new Thread(() -> {
             try { 
-                Thread.sleep(1200); 
+                Thread.sleep(1500); 
             } catch (Exception ignored) {}
-            Platform.runLater(() -> navigateToDashboard(event));
+            Platform.runLater(() -> navigateToDashboard(event, identifiedUser));
         }).start();
     }
 
     private void handleFailure() {
         updateMouthExpression(false); 
         statusLabel.setText("Face Not Recognized (Attempt " + attemptCounter + ")");
-        statusLabel.setStyle("-fx-text-fill: #FF3B30; -fx-font-weight: bold;"); // iOS System Red
+        statusLabel.setStyle("-fx-text-fill: #FF3B30; -fx-font-weight: bold;"); 
     }
 
     private void setUiScanningState(boolean active) {
         if (active) {
             scanButton.setDisable(true);
-            statusLabel.setText("Verifying with Face ID...");
-            statusLabel.setStyle("-fx-text-fill: #007AFF;"); // iOS System Blue
+            statusLabel.setText("Analyzing Facial Matrix...");
+            statusLabel.setStyle("-fx-text-fill: #007AFF;"); 
             resetMouthToNeutral();
             scanLine.setVisible(true);
             laserSweep.play();
@@ -119,9 +126,16 @@ public class LoginController {
         curve.setControlY(18.0); 
     }
 
-    private void navigateToDashboard(ActionEvent event) {
+    // Pass the identified name forward directly to the dashboard
+    private void navigateToDashboard(ActionEvent event, String employeeName) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/groupsix/facescan/Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/groupsix/facescan/Dashboard.fxml"));
+            Parent root = loader.load();
+            
+            // Send user context data straight to the dashboard controller instance
+            DashboardController dashboard = loader.getController();
+            dashboard.registerScannedEmployeeCheckIn(employeeName);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.centerOnScreen();
